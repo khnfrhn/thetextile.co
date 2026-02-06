@@ -405,28 +405,32 @@ body {
 /* Responsive - Mobile */
 @media (max-width: 600px) {
   body {
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto;
+    height: 100vh;
+    overflow: hidden;
   }
 
   #root {
-    height: auto;
-    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   .global-header {
     padding: var(--spacing-unit);
     font-size: 12px;
+    flex-shrink: 0;
   }
 
   .layout-container {
     grid-template-rows: auto 1fr;
-    min-height: calc(100vh - 60px);
+    flex: 1;
+    overflow: hidden;
+    padding-bottom: 80px; /* Space for fixed signup */
   }
 
   .sidebar {
     padding-top: calc(var(--spacing-unit) * 0.5);
+    overflow-y: auto;
   }
 
   .sidebar-header {
@@ -469,8 +473,8 @@ body {
   .main-content {
     padding: var(--spacing-unit);
     padding-top: calc(var(--spacing-unit) * 2);
-    padding-bottom: calc(var(--spacing-unit) * 3);
     min-height: auto;
+    overflow-y: auto;
   }
 
   .meta-data {
@@ -490,8 +494,15 @@ body {
   }
 
   .signup-container {
-    margin-top: calc(var(--spacing-unit) * 2);
-    padding-bottom: var(--spacing-unit);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-body);
+    padding: var(--spacing-unit);
+    border-top: var(--border-style);
+    margin-top: 0;
+    z-index: 100;
   }
 
   .signup-label {
