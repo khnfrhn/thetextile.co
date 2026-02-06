@@ -16,7 +16,19 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Middleware
 app.use(express.json());
-app.use(express.static(join(__dirname, 'dist')));
+
+// Serve static files with correct MIME types
+app.use(express.static(join(__dirname, 'dist'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    } else if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    } else if (path.endsWith('.svg')) {
+      res.setHeader('Content-Type', 'image/svg+xml');
+    }
+  }
+}));
 
 // API endpoint for email subscription
 app.post('/api/subscribe', async (req, res) => {
