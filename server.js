@@ -1,14 +1,25 @@
-require('dotenv').config();
-const express = require('express');
 const path = require('path');
 const fs = require('fs');
+
+// Only load dotenv if .env file exists (don't override Hostinger's env vars)
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config();
+  console.log('Loaded .env file');
+} else {
+  console.log('No .env file, using system env vars');
+}
+
+const express = require('express');
 const { Resend } = require('resend');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend (with validation)
+const apiKey = process.env.RESEND_API_KEY;
+console.log('RESEND_API_KEY present:', !!apiKey);
+const resend = apiKey ? new Resend(apiKey) : null;
 
 const distPath = path.join(__dirname, 'dist');
 const indexPath = path.join(distPath, 'index.html');
@@ -43,6 +54,11 @@ app.post('/api/subscribe', async (req, res) => {
   
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
+  }
+
+  if (!resend) {
+    console.error('Resend not configured - missing API key');
+    return res.status(500).json({ error: 'Email service not configured' });
   }
 
   try {
