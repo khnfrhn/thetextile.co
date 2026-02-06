@@ -404,6 +404,17 @@ body {
 
 /* Responsive - Mobile */
 @media (max-width: 600px) {
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  #root {
+    height: auto;
+    min-height: 100vh;
+  }
+
   .global-header {
     padding: var(--spacing-unit);
     font-size: 12px;
@@ -411,6 +422,7 @@ body {
 
   .layout-container {
     grid-template-rows: auto 1fr;
+    min-height: calc(100vh - 60px);
   }
 
   .sidebar {
@@ -424,7 +436,7 @@ body {
 
   .list-container {
     grid-template-columns: 1fr;
-    max-height: 35vh;
+    max-height: 25vh;
     overflow-y: auto;
   }
 
@@ -445,18 +457,20 @@ body {
   }
 
   .hero-statement {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-top: calc(var(--spacing-unit) * 2);
   }
 
   .hero-sub {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
 
   .main-content {
     padding: var(--spacing-unit);
-    padding-top: calc(var(--spacing-unit) * 3);
+    padding-top: calc(var(--spacing-unit) * 2);
+    padding-bottom: calc(var(--spacing-unit) * 3);
+    min-height: auto;
   }
 
   .meta-data {
@@ -473,6 +487,11 @@ body {
 
   .stat-value {
     font-size: 1.2rem;
+  }
+
+  .signup-container {
+    margin-top: calc(var(--spacing-unit) * 2);
+    padding-bottom: var(--spacing-unit);
   }
 
   .signup-label {
