@@ -1,9 +1,13 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { Resend } = require('resend');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const distPath = path.join(__dirname, 'dist');
 const indexPath = path.join(distPath, 'index.html');
@@ -32,10 +36,26 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API stub
-app.post('/api/subscribe', (req, res) => {
-  console.log('Subscribe:', req.body.email);
-  res.json({ success: true, message: 'Subscribed (test mode)' });
+// Subscribe endpoint - adds email to Resend audience
+app.post('/api/subscribe', async (req, res) => {
+  const { email } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const response = await resend.contacts.create({
+      email: email,
+      audienceId: process.env.RESEND_AUDIENCE_ID,
+    });
+    
+    console.log('Subscribed:', email);
+    res.json({ success: true, message: 'Successfully subscribed', id: response.id });
+  } catch (error) {
+    console.error('Resend error:', error);
+    res.status(500).json({ error: 'Failed to subscribe', details: error.message });
+  }
 });
 
 // Static files from dist ONLY
